@@ -21,7 +21,7 @@ public class TestMatch {
     public static void main(String[] args) {
 
         String basicImgPath = "/Users/wuxi/Downloads/M0.jpg";
-        String templateImgPath = "/Users/wuxi/Downloads/M2.jpg";
+        String templateImgPath = "/Users/wuxi/Downloads/test9.jpeg";
         String originalImgPath = "/Users/wuxi/Downloads/3.jpg";
 
         System.out.println(isIconExist(basicImgPath, templateImgPath, originalImgPath));
@@ -33,6 +33,12 @@ public class TestMatch {
         Mat originalImg = Imgcodecs.imread(originalImgPath, 0);
         int originalImgHeight = originalImg.height();
         int originalImgWidth = originalImg.width();
+
+        System.out.println(originalImg.toString());
+
+
+        Imgcodecs.imwrite("/Users/wuxi/Desktop/"+"originalImg"+".jpg",originalImg);
+
 
         System.out.println(originalImgWidth);
         System.out.println(originalImgHeight);
@@ -136,11 +142,16 @@ public class TestMatch {
     }
 
     public static boolean matchImg(Mat originalImg, Mat templateImg) {
+
         Mat result = originalImg.clone();
+
         Imgproc.matchTemplate(originalImg, templateImg, result, Imgproc.TM_CCOEFF_NORMED);
+
         //两幅进行对比，归一化相关系数匹配法
+        //采用模板与目标图像像素与各自图像的平均值计算dot product，正值越大匹配度越高，负值越大图像的区别越大，但如果图像没有明显的特征（即图像中的像素值与平均值接近）则返回值越接近0
 
         Core.MinMaxLocResult minMaxLocResult = Core.minMaxLoc(result);
+
 
         if (minMaxLocResult.maxVal > 0.9) {
             System.out.println("匹配成功");
@@ -149,6 +160,9 @@ public class TestMatch {
             System.out.println("匹配失败");
             return false;
         }
+
+
+
     }
 
 }
