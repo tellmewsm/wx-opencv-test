@@ -14,9 +14,9 @@ import java.util.Map;
 /**
  * Created by PokerDealer on 2019/5/23.
  */
-public class TestHsv {
+public class TestHsvLocation {
 
-    static{ System.load(System.getProperty("user.dir")+"/src/main/resources/opencv_java342.dylib"); }
+    static{ System.load("/Users/wuxi/Downloads/opencv_java342.dylib");}
 
     public static void main(String[] args) {
 

@@ -1,12 +1,13 @@
 package com.wx;
 
-import com.alibaba.fastjson.JSONObject;
 import org.opencv.core.*;
+import org.opencv.highgui.HighGui;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import com.alibaba.fastjson.JSONObject;
+import java.util.HashMap;
 import java.util.Map;
 
 import static org.opencv.imgproc.Imgproc.*;
@@ -14,15 +15,15 @@ import static org.opencv.imgproc.Imgproc.*;
 /**
  * Created by PokerDealer on 2019/5/23
  */
-public class TestMatch {
+public class TestImageMatch {
 
-    static{ System.load(System.getProperty("user.dir")+"/src/main/resources/opencv_java342.dylib"); }
+    static{ System.load("/Users/wuxi/Downloads/opencv_java342.dylib");}
 
     public static void main(String[] args) {
 
-        String basicImgPath = "/Users/wuxi/Downloads/M0.jpg";
-        String templateImgPath = "/Users/wuxi/Downloads/test9.jpeg";
-        String originalImgPath = "/Users/wuxi/Downloads/3.jpg";
+        String basicImgPath = "/Users/wuxi/Downloads/tem.png";
+        String templateImgPath = "/Users/wuxi/Downloads/tem.png";
+        String originalImgPath = "/Users/wuxi/Downloads/origin.png";
 
         System.out.println(isIconExist(basicImgPath, templateImgPath, originalImgPath));
 
@@ -36,9 +37,7 @@ public class TestMatch {
 
         System.out.println(originalImg.toString());
 
-
         Imgcodecs.imwrite("/Users/wuxi/Desktop/"+"originalImg"+".jpg",originalImg);
-
 
         System.out.println(originalImgWidth);
         System.out.println(originalImgHeight);
@@ -64,8 +63,9 @@ public class TestMatch {
 
         Imgcodecs.imwrite("/Users/wuxi/Desktop/M0_1Resize.jpg",templateImgResize);
 
-//        HighGui.imshow("tt",dstImg);
-//        HighGui.waitKey(0);
+        //HighGui.imshow("tt",templateImgResize);
+        //HighGui.waitKey(0);
+
         Boolean result = matchImg(originalImg, templateImgResize);
 
         return result;
@@ -147,22 +147,31 @@ public class TestMatch {
 
         Imgproc.matchTemplate(originalImg, templateImg, result, Imgproc.TM_CCOEFF_NORMED);
 
-        //两幅进行对比，归一化相关系数匹配法
+        //两幅进行对比
         //采用模板与目标图像像素与各自图像的平均值计算dot product，正值越大匹配度越高，负值越大图像的区别越大，但如果图像没有明显的特征（即图像中的像素值与平均值接近）则返回值越接近0
-
         Core.MinMaxLocResult minMaxLocResult = Core.minMaxLoc(result);
 
+        //获取坐标 归一化相关系数匹配法
+        Core.normalize(result, result, 0, 1, Core.NORM_MINMAX, -1, new Mat());
+        Core.MinMaxLocResult mmlr = Core.minMaxLoc(result);
 
-        if (minMaxLocResult.maxVal > 0.9) {
+        Point matchLocation = mmlr.maxLoc; // 此处使用maxLoc还是minLoc取决于使用的匹配算法
+        System.out.println(matchLocation.toString());
+
+        //Rectangle函数参数： 图片，左上角，右下角，颜色，线条粗细，线条类型，点类型
+        Imgproc.rectangle(originalImg, matchLocation,
+                new Point(matchLocation.x + templateImg.cols(), matchLocation.y + templateImg.rows()),
+                new Scalar(0, 0, 0, 0),2);// 表示矩形颜色的标量对象(BGR)
+
+        Imgcodecs.imwrite("/Users/wuxi/Desktop/result"+1+".jpg",originalImg);
+
+        if (minMaxLocResult.maxVal >=0.9) {
             System.out.println("匹配成功");
             return true;
         } else {
             System.out.println("匹配失败");
             return false;
         }
-
-
-
     }
 
 }
