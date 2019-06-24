@@ -5,7 +5,6 @@ import com.alibaba.fastjson.JSONObject;
 import org.opencv.core.*;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -60,7 +59,7 @@ public class TestHsvLocation {
         //RETR_CCOMP 建立两个等级的轮廓，上面的一层为外边界，里面的一层为内孔的边界信息，如果内孔内还有一个连通物体，这个物体的边界也在顶层
         //CHAIN_APPROX_SIMPLE压缩水平方向，垂直方向，对角线方向的元素，只保留该方向的终点坐标，例如一个矩形轮廓只需4个点来保存轮廓信息
 
-        //在二值化图像中查找轮廓
+        //在二值化图像中查找轮廓，RETR_CCOMP 可以好几层
         Imgproc.findContours(mask,contours,new Mat(),Imgproc.RETR_CCOMP,Imgproc.CHAIN_APPROX_SIMPLE);
 
         JSONObject jsonObject = new JSONObject();
