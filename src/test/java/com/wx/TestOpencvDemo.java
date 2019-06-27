@@ -25,7 +25,7 @@ public class TestOpencvDemo {
     }
 
     @Test
-    public void TestMat() {
+    public void TestMatResize() {
 
         Mat img = new Mat(3, 3, CvType.CV_8UC3);//new Scalar(0,255,0)
 
@@ -33,7 +33,8 @@ public class TestOpencvDemo {
 
         img.put(0,0,new byte[]{0, (byte) 255,0,(byte) 255,0,0,0,0,(byte) 255});
 
-        System.out.println(img.size());//矩阵大小 3X3
+        //矩阵大小 3X3
+        System.out.println(img.size());
 
         Imgproc.resize(img,dist,new Size(6,6));
 
@@ -63,4 +64,18 @@ public class TestOpencvDemo {
         Imgcodecs.imwrite("/Users/wuxi/Desktop/"+"img2img2"+".jpg",originalImg);
 
     }
+
+    @Test
+    public void TestMatReshape() {
+
+        Mat img = new Mat(3, 3, CvType.CV_8UC3,new Scalar(0,255,0));
+
+        System.out.println(img.dump());
+
+        //拉扯成一行
+        System.out.println(img.reshape(1,1).dump());
+
+    }
+
+
 }

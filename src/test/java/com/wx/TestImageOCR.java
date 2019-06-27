@@ -125,6 +125,7 @@ public class TestImageOCR {
                 imgROI.convertTo(imgROI, CvType.CV_32F);
 
                 trainData.push_back(imgROI.reshape(1, 1));
+                //Imgcodecs.imwrite("/Users/wuxi/Pictures/picture/"+imgROI+".jpg", imgROI.reshape(1, 1));
             }
         }
 
