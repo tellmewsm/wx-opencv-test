@@ -18,12 +18,18 @@
   </properties>
 
   <dependencies>
-    <dependency>
+<!--    <dependency>
       <groupId>org.openpnp</groupId>
       <artifactId>opencv</artifactId>
       <version>3.2.0</version>
       <systemPath>/Users/wuxi/Documents/opencv/opencv-320.jar</systemPath>
       <scope>system</scope>
+    </dependency>-->
+
+    <dependency>
+      <groupId>org.openpnp</groupId>
+      <artifactId>opencv</artifactId>
+      <version>3.4.2-1</version>
     </dependency>
 
     <dependency>
