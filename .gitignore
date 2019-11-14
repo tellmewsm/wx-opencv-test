@@ -21,6 +21,7 @@ test-output/
 *.njsproj
 *.sln
 *.DS_Store
+*.dylib
 
 ## File-based project format:
 *.iws

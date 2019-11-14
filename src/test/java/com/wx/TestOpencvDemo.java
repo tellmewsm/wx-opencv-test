@@ -6,11 +6,15 @@ import org.opencv.imgproc.Imgproc;
 import org.testng.annotations.Test;
 
 /**
- * Created by wuxi on 2019/6/20.
- */
+ * @ClassName TestOpencvDemo
+ * @Description //TODO
+ * @Author wuxi
+ * @Date 2019-06-20 20:00
+ * @Version 1.0
+ **/
 public class TestOpencvDemo {
 
-    static{ System.load("/Users/wuxi/Downloads/opencv_java342.dylib");}
+    static { System.load(System.getProperty("user.dir") + "/src/main/resources/opencv_java342.dylib");}
 
     public static void main(String[] args) {
 

@@ -11,11 +11,15 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by PokerDealer on 2019/5/23.
- */
+ * @ClassName TestHsvLocation
+ * @Description //TODO
+ * @Author wuxi
+ * @Date 2019-05-23 19:22
+ * @Version 1.0
+ **/
 public class TestHsvLocation {
 
-    static{ System.load("/Users/wuxi/Downloads/opencv_java342.dylib");}
+    static { System.load(System.getProperty("user.dir") + "/src/main/resources/opencv_java342.dylib");}
 
     public static void main(String[] args) {
 

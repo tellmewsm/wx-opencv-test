@@ -9,17 +9,21 @@ import java.util.List;
 import static org.opencv.imgproc.Imgproc.*;
 
 /**
- * Created by PokerDealer on 2019/5/23
- */
+ * @ClassName TestImageMatch
+ * @Description //TODO
+ * @Author wuxi
+ * @Date 2019-05-23 18:02
+ * @Version 1.0
+ **/
 public class TestImageMatch {
 
-    static{ System.load("/Users/wuxi/Downloads/opencv_java342.dylib");}
+    static { System.load(System.getProperty("user.dir") + "/src/main/resources/opencv_java342.dylib");}
 
     public static void main(String[] args) {
 
-        String basicImgPath = "/Users/wuxi/Downloads/tem.png";
-        String templateImgPath = "/Users/wuxi/Downloads/tem.png";
-        String originalImgPath = "/Users/wuxi/Downloads/origin.png";
+        String basicImgPath = "/Users/wuxi/Desktop/tem.png";
+        String templateImgPath = "/Users/wuxi/Desktop/tem.png";
+        String originalImgPath = "/Users/wuxi/Desktop/origin.png";
 
         System.out.println(isIconExist(basicImgPath, templateImgPath, originalImgPath));
 
