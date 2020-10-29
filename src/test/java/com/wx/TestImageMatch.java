@@ -3,6 +3,8 @@ package com.wx;
 import org.opencv.core.*;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
+import org.testng.annotations.Test;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,13 +19,17 @@ import static org.opencv.imgproc.Imgproc.*;
  **/
 public class TestImageMatch {
 
-    static { System.load(System.getProperty("user.dir") + "/src/main/resources/opencv_java342.dylib");}
+    static String path = System.getProperty("user.dir") + "/src/main/resources/";
+
+    static {
+        System.load(path + "opencv_java342.dylib");
+    }
 
     public static void main(String[] args) {
 
-        String basicImgPath = "/Users/wuxi/Desktop/tem.png";
-        String templateImgPath = "/Users/wuxi/Desktop/tem.png";
-        String originalImgPath = "/Users/wuxi/Desktop/origin.png";
+        String basicImgPath = path + "/bug.png";
+        String templateImgPath = path + "/bug.png";
+        String originalImgPath = path + "/bugopencv.png";
 
         System.out.println(isIconExist(basicImgPath, templateImgPath, originalImgPath));
 
@@ -35,9 +41,7 @@ public class TestImageMatch {
         int originalImgHeight = originalImg.height();
         int originalImgWidth = originalImg.width();
 
-        System.out.println(originalImg.toString());
-
-        Imgcodecs.imwrite("/Users/wuxi/Desktop/"+"originalImg"+".jpg",originalImg);
+        Imgcodecs.imwrite(path +"/imagematch/bugopencv_original.jpg", originalImg);
 
         System.out.println(originalImgWidth);
         System.out.println(originalImgHeight);
@@ -61,7 +65,7 @@ public class TestImageMatch {
         //修改图像大小Resize Imgproc.resize,将需要对比图像进行比例缩放 在进行对比
         Imgproc.resize(templateImg, templateImgResize, new Size(templateImgWidth * ratio, templateImgHeight * ratio));
 
-        Imgcodecs.imwrite("/Users/wuxi/Desktop/M0_1Resize.jpg",templateImgResize);
+        Imgcodecs.imwrite(path +"/imagematch/M0_1Resize.jpg", templateImgResize);
 
         //HighGui.imshow("tt",templateImgResize);
         //HighGui.waitKey(0);
@@ -77,7 +81,7 @@ public class TestImageMatch {
         //图像的模糊化Blur处理,输出 dstImage 3*3，平滑处理
         Imgproc.blur(img, dstImage, new Size(3, 3));
 
-        Imgcodecs.imwrite("/Users/wuxi/Desktop/M0_1"+img+".jpg",dstImage);
+        Imgcodecs.imwrite(path +"/imagematch/M0_1" + img + ".jpg", dstImage);
 
         int dstChannels = dstImage.channels();
         Mat edges = img.clone();
@@ -85,7 +89,7 @@ public class TestImageMatch {
         //边缘检测
         Imgproc.Canny(dstImage, edges, 40, 80);
 
-        Imgcodecs.imwrite("/Users/wuxi/Desktop/M0_2"+img+".jpg",edges);
+        Imgcodecs.imwrite(path +"/imagematch/M0_2" + img + ".jpg", edges);
 
 //        HighGui.imshow("tt",edges);
 //        HighGui.waitKey(0);
@@ -141,6 +145,7 @@ public class TestImageMatch {
         return value;
     }
 
+
     public static boolean matchImg(Mat originalImg, Mat templateImg) {
 
         Mat result = originalImg.clone();
@@ -161,16 +166,58 @@ public class TestImageMatch {
         //Rectangle函数参数： 图片，左上角，右下角，颜色，线条粗细，线条类型，点类型
         Imgproc.rectangle(originalImg, matchLocation,
                 new Point(matchLocation.x + templateImg.cols(), matchLocation.y + templateImg.rows()),
-                new Scalar(0, 0, 0, 0),2);// 表示矩形颜色的标量对象(BGR)
+                new Scalar(0, 0, 0, 0), 2);// 表示矩形颜色的标量对象(BGR)
 
-        Imgcodecs.imwrite("/Users/wuxi/Desktop/result"+1+".jpg",originalImg);
+        Imgcodecs.imwrite(path +"/imagematch/result" + 1 + ".jpg", originalImg);
 
-        if (minMaxLocResult.maxVal >=0.9) {
+        if (minMaxLocResult.maxVal >= 0.9) {
             System.out.println("匹配成功");
             return true;
         } else {
             System.out.println("匹配失败");
             return false;
+        }
+    }
+
+    // 同像素 单个对比测试
+    @Test
+    public static void matchImg() {
+
+        String templateImgPath = path + "/bug.png";
+        String originalImgPath = path + "/bugopencv.png";
+
+        Mat originalImg = Imgcodecs.imread(originalImgPath, 0);
+        Mat templateImg = Imgcodecs.imread(templateImgPath, 0);
+
+        Mat result = originalImg.clone();
+
+        //CV_TM_CCOEFF_NORMED 值越大越匹配
+        Imgproc.matchTemplate(originalImg, templateImg, result, Imgproc.TM_CCOEFF_NORMED);
+
+        //获得最匹配矩阵
+        Core.MinMaxLocResult mmlr = Core.minMaxLoc(result);
+        //最大为1
+        System.out.println(mmlr.maxVal);
+
+        //归一化匹配结果
+        Core.normalize(result, result, 0, 1, Core.NORM_MINMAX, -1, new Mat());
+
+        //获取矩阵左上角坐标
+        Point matchLocation = mmlr.maxLoc;
+        System.out.println(matchLocation.toString());
+
+        //画出匹配到的边界矩形
+        //矩形的右下角坐标 x+该矩阵的列，y+矩阵的行
+        Imgproc.rectangle(originalImg, matchLocation,
+                new Point(matchLocation.x + templateImg.cols(), matchLocation.y + templateImg.rows()),
+                new Scalar(0, 0, 0, 0), 2);
+
+        Imgcodecs.imwrite(path + "/imagematch/bugopencv_result.jpg", originalImg);
+
+        if (mmlr.maxVal >= 0.9) {
+            System.out.println("匹配成功");
+        } else {
+            System.out.println("匹配失败");
         }
     }
 
